@@ -95,7 +95,8 @@
     const socket = io('http://192.168.0.19');
     $(function() {
         if (cordova.platformId == 'android') {
-            StatusBar.backgroundColorByHexString("#515151");
+            StatusBar.backgroundColorByHexString("#343a40");
+            StatusBar.styleLightContent(true);
         }
 
         requestUser();
@@ -104,6 +105,12 @@
             $('#setName').hide();
             $('#game').hide();
             showLoader();
+        });
+
+        socket.on('updateGame', function(data) {
+            updateBoard(data.tiles);
+            updateConference(data.conference);
+            showFooter();
         });
 
         socket.on('conferenceUpdate', function(data) {
@@ -135,6 +142,7 @@
         })
 
         $('#changeNameBack').click(function(event) {
+            event.preventDefault();
             $('#changeName').hide();
             $('#game').show();
             showFooter();
@@ -245,11 +253,8 @@
     }
 
     function loadGame() {
-        socket.emit('requestGame', {user: user}, function(data) {
-            updateBoard(data.tiles);
-            updateConference(data.conference);
-        });
-        showFooter();
+        showLoader();
+        socket.emit('requestGame', {user: user});
     }
 
     function updateConference(conference) {
