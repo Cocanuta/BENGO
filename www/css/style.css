@@ -100,3 +100,12 @@ body {
     }
 }
 
+.list-group {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.list-group li {
+    background-color: #515151;
+}
+

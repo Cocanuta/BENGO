@@ -38,6 +38,39 @@
             <p class="mt-5 mb-3 text-muted">© SnatchyBuckles 2018</p>
         </form>
     </div>
+    <div id="stats" style="display: none;">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Microsoft
+                <span class="badge badge-pill" style="background-color: #107c10" id="countMicrosoft"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Bethesda
+                <span class="badge badge-pill" style="background-color: #DE2C25" id="countBethesda"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Square-Enix
+                <span class="badge badge-pill" style="background-color: #a61b27" id="countSquareEnix"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Ubisoft
+                <span class="badge badge-pill" style="background-color: #4E5C9D" id="countUbisoft"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                PC Gaming Show
+                <span class="badge badge-pill" style="background-color: #be7800" id="countPCGaming"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Playstation
+                <span class="badge badge-pill" style="background-color: #0E51A0" id="countPlaystation"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #474747;">
+                Total
+                <span class="badge badge-pill" style="background-color: #28a745" id="countTotal"></span>
+            </li>
+        </ul>
+        <button class="btn btn-lg btn-success btn-block" id="statsBack">Back</button>
+    </div>
     <div class="loader" style="display: none">
     </div>
 </div>
@@ -91,11 +124,24 @@
             $('#changeName').show();
         });
 
+        $('#navStats').click(function(event) {
+            $('#game').hide();
+            hideFooter();
+            $('#stats').show();
+        })
+
         $('#changeNameBack').click(function(event) {
             $('#changeName').hide();
             $('#game').show();
             showFooter();
-        })
+        });
+
+        $('#statsBack').click(function(event) {
+            event.preventDefault();
+            $('#stats').hide();
+            $('#game').show();
+            showFooter();
+        });
 
         $('#changeNameSubmit').click(function(event) {
             if($('#changeNameInput').val() !== "") {
@@ -109,12 +155,6 @@
                 loadGame();
             }
         });
-    });
-
-    $(window).resize(function() {
-        for(let i = 0; i < board.length; i++) {
-            board[i].div.height(board[i].div.outerWidth());
-        }
     });
 
     function updateBoard(tiles) {
@@ -159,6 +199,45 @@
                 }
             }
         }
+
+        let microsoft = 0;
+        let bethesda = 0;
+        let squareEnix = 0;
+        let ubisoft = 0;
+        let pcGaming = 0;
+        let playstation = 0;
+
+        for(let i = 0; i < tiles.length; i++) {
+            if(tiles[i].checked) {
+                switch(tiles[i].checkedColor) {
+                    case "#107c10" :
+                        microsoft++;
+                        break;
+                    case "#DE2C25":
+                        bethesda++;
+                        break;
+                    case "#a61b27":
+                        squareEnix++;
+                        break;
+                    case "#4E5C9D":
+                        ubisoft++;
+                        break;
+                    case "#be7800":
+                        pcGaming++;
+                        break;
+                    case "#0E51A0":
+                        playstation++;
+                        break;
+                }
+            }
+        }
+        $('#countMicrosoft').text(microsoft);
+        $('#countBethesda').text(bethesda);
+        $('#countSquareEnix').text(squareEnix);
+        $('#countUbisoft').text(ubisoft);
+        $('#countPCGaming').text(pcGaming);
+        $('#countPlaystation').text(playstation);
+        $('#countTotal').text(microsoft + bethesda + squareEnix + ubisoft + pcGaming + playstation);
     }
 
     function loadGame() {
