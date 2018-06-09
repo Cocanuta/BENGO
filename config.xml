@@ -13,5 +13,6 @@
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />
     </platform>
+	<plugin name="cordova-plugin-whitelist" spec="~1.2.0" />
 	<plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
 </widget>
