@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bingo</title>
+    <title>BENGO!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -94,6 +94,10 @@
     let board = null;
     const socket = io('http://192.168.0.19');
     $(function() {
+        if (cordova.platformId == 'android') {
+            StatusBar.backgroundColorByHexString("#515151");
+        }
+
         requestUser();
 
         socket.on('connect_timeout', function() {
