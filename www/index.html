@@ -93,7 +93,17 @@
     let user = null;
     let board = null;
     const socket = io('http://192.168.0.19');
-    $(function() {
+
+    (function() {
+        onLoad();
+    })();
+
+    function onLoad() {
+        showLoader();
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    function onDeviceReady() {
         showLoader();
         requestUser();
 
@@ -112,57 +122,57 @@
         socket.on('conferenceUpdate', function(data) {
             updateConference(data.conference);
         });
+    }
 
-        $('#setNameSubmit').click(function(event){
-            if($('#setNameInput').val() !== "") {
-                event.preventDefault();
-                window.localStorage.setItem('user', $('#setNameInput').val());
-                user = $('#setNameInput').val();
-                $('#setName').hide();
-                board = null;
-                loadGame();
-            }
-        });
-
-        $('#navSettings').click(function(event) {
-            $('#game').hide();
-            $('#changeNameInput').val(user);
-            hideFooter();
-            $('#changeName').show();
-        });
-
-        $('#navStats').click(function(event) {
-            $('#game').hide();
-            hideFooter();
-            $('#stats').show();
-        })
-
-        $('#changeNameBack').click(function(event) {
+    $('#setNameSubmit').click(function(event){
+        if($('#setNameInput').val() !== "") {
             event.preventDefault();
+            window.localStorage.setItem('user', $('#setNameInput').val());
+            user = $('#setNameInput').val();
+            $('#setName').hide();
+            board = null;
+            loadGame();
+        }
+    });
+
+    $('#navSettings').click(function(event) {
+        $('#game').hide();
+        $('#changeNameInput').val(user);
+        hideFooter();
+        $('#changeName').show();
+    });
+
+    $('#navStats').click(function(event) {
+        $('#game').hide();
+        hideFooter();
+        $('#stats').show();
+    })
+
+    $('#changeNameBack').click(function(event) {
+        event.preventDefault();
+        $('#changeName').hide();
+        $('#game').show();
+        showFooter();
+    });
+
+    $('#statsBack').click(function(event) {
+        event.preventDefault();
+        $('#stats').hide();
+        $('#game').show();
+        showFooter();
+    });
+
+    $('#changeNameSubmit').click(function(event) {
+        if($('#changeNameInput').val() !== "") {
+            event.preventDefault();
+            socket.emit('changeName', { old: user, new: $('#changeNameInput').val()});
+            window.localStorage.setItem('user', $('#changeNameInput').val());
+            user = $('#changeNameInput').val();
             $('#changeName').hide();
-            $('#game').show();
-            showFooter();
-        });
-
-        $('#statsBack').click(function(event) {
-            event.preventDefault();
-            $('#stats').hide();
-            $('#game').show();
-            showFooter();
-        });
-
-        $('#changeNameSubmit').click(function(event) {
-            if($('#changeNameInput').val() !== "") {
-                event.preventDefault();
-                socket.emit('changeName', { old: user, new: $('#changeNameInput').val()});
-                window.localStorage.setItem('user', $('#changeNameInput').val());
-                user = $('#changeNameInput').val();
-                $('#changeName').hide();
-                showLoader();
-                board = null;
-                loadGame();
-            }
-        });
+            showLoader();
+            board = null;
+            loadGame();
+        }
     });
 
     function updateBoard(tiles) {
