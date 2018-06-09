@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.snatchybuckles.bengo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>BINGO</name>
+    <description>
+        E3 BENGO 2018
+    </description>
+    <author email="support@snatchybuckles.com" href="http://twitch.tv/SnatchyBuckles">
+        Cocanuta
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+	<plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
+</widget>
