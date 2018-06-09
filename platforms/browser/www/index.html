@@ -94,10 +94,6 @@
     let board = null;
     const socket = io('http://192.168.0.19');
     $(function() {
-        if (cordova.platformId == 'android') {
-            StatusBar.backgroundColorByHexString("#343a40");
-            StatusBar.styleLightContent(true);
-        }
         showLoader();
         requestUser();
 
