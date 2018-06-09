@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.snatchybuckles.bengo" version="1.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-	<name short="BENGO">BENGO 2018</name>
+<widget id="com.snatchybuckles.bengo" version="1.0.10" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+	<name>BENGO</name>
     <description>
         E3 BENGO 2018
     </description>
