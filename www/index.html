@@ -329,7 +329,7 @@
 
     function requestUser() {
         showLoader();
-        socket.emit('requestStatus', function(data) {
+        socket.emit('requestStatus', 'login', function(data) {
             if(data.enabled) {
                 if(user === null) {
                     let c = window.localStorage.getItem('user');
