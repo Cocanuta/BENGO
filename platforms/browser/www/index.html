@@ -115,6 +115,7 @@
         socket.on('connect_timeout', function() {
             $('#game').hide();
             $('#changeName').hide();
+            $('#setName').hide();
             $('#stats').hide();
             hideFooter();
             $('#errorTitle').text("Unable To Connect");
@@ -126,6 +127,7 @@
         socket.on('connect_error', function() {
             $('#game').hide();
             $('#changeName').hide();
+            $('#setName').hide();
             $('#stats').hide();
             hideFooter();
             $('#errorTitle').text("Unable To Connect");
