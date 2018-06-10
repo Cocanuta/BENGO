@@ -140,6 +140,11 @@
             showFooter();
         });
 
+        socket.on('statusChanged', function() {
+            showLoader();
+            requestUser();
+        });
+
         socket.on('errorMessage', function(data) {
             $('#game').hide();
             $('#changeName').hide();
