@@ -71,10 +71,10 @@
         </ul>
         <button class="btn btn-lg btn-success btn-block" id="statsBack">Back</button>
     </div>
-    <div id="error" style="display: none; min-height: 80%;">
+    <div id="error" style="display: none; min-height: 100%; margin-top: 50%">
         <h1 id="errorTitle" class="h3 mb-3 font-weight-normal"></h1>
         <span id="errorMessage"></span>
-        <button class="btn btn-lg btn-success btn-block" id="errorButton">Retry</button>
+        <button class="btn btn-lg btn-success btn-block" id="errorButton" style="margin: 20px auto; max-width: 230px;">Retry</button>
     </div>
     <div class="loader" style="display: none">
     </div>
@@ -84,20 +84,21 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-4"><i id="navStats" class="fas fa-chart-bar fa-2x"></i></div>
-            <div class="col-4 offset-4"><i id="navSettings" class="fas fa-cog fa-2x"></i></div>
+            <div class="col-4"><i id="navRefresh" class="fas fa-sync-alt fa-2x"></i></div>
+            <div class="col-4"><i id="navSettings" class="fas fa-cog fa-2x"></i></div>
         </div>
     </div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
-<script src="http://192.168.0.19/socket.io/socket.io.js"></script>
+<script src="js/socket.io.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.fittext.js"></script>
 <script>
     let user = null;
     let board = null;
-    const socket = io('http://192.168.0.19');
+    const socket = io('http://bengo.snatchybuckles.com');
 
     (function() {
         onLoad();
@@ -139,6 +140,16 @@
             showFooter();
         });
 
+        socket.on('statusChanged', function() {
+            $('#game').hide();
+            $('#stats').hide();
+            $('#changeName').hide();
+            $('#error').hide();
+            $('#setName').hide();
+            showLoader();
+            requestUser();
+        });
+
         socket.on('errorMessage', function(data) {
             $('#game').hide();
             $('#changeName').hide();
@@ -172,6 +183,12 @@
         $('#changeNameInput').val(user);
         hideFooter();
         $('#changeName').show();
+    });
+
+    $('#navRefresh').click(function(event) {
+        $('#game').hide();
+        showLoader();
+        loadGame();
     });
 
     $('#navStats').click(function(event) {
@@ -255,6 +272,8 @@
                 }
             }
             hideLoader();
+            $('#game').show();
+            showFooter();
         }
 
         let microsoft = 0;
@@ -317,6 +336,8 @@
                 user = c;
                 loadGame();
             }
+        } else {
+            loadGame();
         }
     }
 
