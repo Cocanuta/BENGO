@@ -141,6 +141,11 @@
         });
 
         socket.on('statusChanged', function() {
+            $('#game').hide();
+            $('#stats').hide();
+            $('#changeName').hide();
+            $('#error').hide();
+            $('#setName').hide();
             showLoader();
             requestUser();
         });
