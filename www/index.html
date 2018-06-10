@@ -84,7 +84,8 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-4"><i id="navStats" class="fas fa-chart-bar fa-2x"></i></div>
-            <div class="col-4 offset-4"><i id="navSettings" class="fas fa-cog fa-2x"></i></div>
+            <div class="col-4"><i id="navRefresh" class="fas fa-sync-alt fa-2x"></i></div>
+            <div class="col-4"><i id="navSettings" class="fas fa-cog fa-2x"></i></div>
         </div>
     </div>
 </footer>
@@ -172,6 +173,12 @@
         $('#changeNameInput').val(user);
         hideFooter();
         $('#changeName').show();
+    });
+
+    $('#navRefresh').click(function(event) {
+        $('#game').hide();
+        showLoader();
+        loadGame();
     });
 
     $('#navStats').click(function(event) {
