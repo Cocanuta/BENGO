@@ -71,6 +71,11 @@
         </ul>
         <button class="btn btn-lg btn-success btn-block" id="statsBack">Back</button>
     </div>
+    <div id="error" style="display: none; min-height: 80%;">
+        <h1 id="errorTitle" class="h3 mb-3 font-weight-normal"></h1>
+        <span id="errorMessage"></span>
+        <button class="btn btn-lg btn-success btn-block" id="errorButton">Retry</button>
+    </div>
     <div class="loader" style="display: none">
     </div>
 </div>
@@ -107,15 +112,43 @@
         requestUser();
 
         socket.on('connect_timeout', function() {
-            $('#setName').hide();
             $('#game').hide();
-            showLoader();
+            $('#changeName').hide();
+            $('#stats').hide();
+            hideFooter();
+            $('#errorTitle').text("Unable To Connect");
+            $('#errorMessage').text("Lost connection to the server.");
+            hideLoader();
+            $('#error').show();
+        });
+
+        socket.on('connect_error', function() {
+            $('#game').hide();
+            $('#changeName').hide();
+            $('#stats').hide();
+            hideFooter();
+            $('#errorTitle').text("Unable To Connect");
+            $('#errorMessage').text("Unable to reach the server.");
+            hideLoader();
+            $('#error').show();
         });
 
         socket.on('updateGame', function(data) {
             updateBoard(data.tiles);
             updateConference(data.conference);
             showFooter();
+        });
+
+        socket.on('errorMessage', function(data) {
+            $('#game').hide();
+            $('#changeName').hide();
+            $('#setName').hide();
+            $('#stats').hide();
+            hideFooter();
+            hideLoader();
+            $('#errorTitle').text(data.title);
+            $('#errorMessage').text(data.message);
+            $('#error').show();
         });
 
         socket.on('conferenceUpdate', function(data) {
@@ -159,6 +192,12 @@
         $('#stats').hide();
         $('#game').show();
         showFooter();
+    });
+
+    $('#errorButton').click(function(event) {
+        event.preventDefault();
+        $('#error').hide();
+        requestUser();
     });
 
     $('#changeNameSubmit').click(function(event) {
