@@ -329,18 +329,22 @@
 
     function requestUser() {
         showLoader();
-        if(user === null) {
-            let c = window.localStorage.getItem('user');
-            if(c === null) {
-                hideLoader();
-                $('#setName').show();
-            } else {
-                user = c;
-                loadGame();
+        socket.emit('requestStatus', function(data) {
+            if(data.enabled) {
+                if(user === null) {
+                    let c = window.localStorage.getItem('user');
+                    if(c === null) {
+                        hideLoader();
+                        $('#setName').show();
+                    } else {
+                        user = c;
+                        loadGame();
+                    }
+                } else {
+                    loadGame();
+                }
             }
-        } else {
-            loadGame();
-        }
+        });
     }
 
     function showLoader() {
