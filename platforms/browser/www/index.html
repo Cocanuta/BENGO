@@ -152,6 +152,12 @@
             requestUser();
         });
 
+        socket.on('serverStauts', function(data) {
+            if(data.enabled) {
+                login();
+            }
+        });
+
         socket.on('errorMessage', function(data) {
             $('#game').hide();
             $('#changeName').hide();
@@ -329,22 +335,22 @@
 
     function requestUser() {
         showLoader();
-        socket.emit('requestStatus', 'login', function(data) {
-            if(data.enabled) {
-                if(user === null) {
-                    let c = window.localStorage.getItem('user');
-                    if(c === null) {
-                        hideLoader();
-                        $('#setName').show();
-                    } else {
-                        user = c;
-                        loadGame();
-                    }
-                } else {
-                    loadGame();
-                }
+        socket.emit('checkServerStatus');
+    }
+
+    function login() {
+        if(user === null) {
+            let c = window.localStorage.getItem('user');
+            if(c === null) {
+                hideLoader();
+                $('#setName').show();
+            } else {
+                user = c;
+                loadGame();
             }
-        });
+        } else {
+            loadGame();
+        }
     }
 
     function showLoader() {
