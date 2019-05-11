@@ -1,0 +1,17 @@
+{
+  "name": "e3-bingo-server",
+  "version": "0.0.1",
+  "description": "The server backend for the SnatchyBuckles E3 Bingo game.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^5.4.0",
+    "better-sqlite3-helper": "^2.0.2",
+    "express": "^4.16.4",
+    "https": "^1.0.0",
+    "shuffle-array": "^1.0.1",
+    "socket.io": "^2.2.0"
+  }
+}
