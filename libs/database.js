@@ -1,15 +1,20 @@
+/**
+ * Database Controller
+ * @module Database
+ * @requires better-sqlite3-helper
+ * @requires shuffle
+ */
 const DB = require('better-sqlite3-helper');
 const shuffle = require('shuffle-array');
 
 
 /**
  * Connect - Open a connection to the sqlite3 database.
- *
  * @function
  */
 function Connect() {
   DB({
-    path: Config.Database,
+    path: __dirname + Config.Database,
     memory: false,
     readonly: false,
     fileMustExist: true,
@@ -160,6 +165,7 @@ function GetCard(tileArray) {
   }
   return tileArray;
 }
+
 
 module.exports = {
   Connect: Connect,

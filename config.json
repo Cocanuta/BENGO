@@ -1,0 +1,7 @@
+{
+  "SSLKey": "/../key/privkey.pem",
+  "SSLCert": "/../key/fullchain.pem",
+  "Conference": "Microsoft",
+  "Port": 3000,
+  "Database": "/../data.db"
+}

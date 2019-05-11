@@ -1,0 +1,31 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "source": {
+        "include": ["main.js", "libs", "package.json", "README.md"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates": {
+        "referenceTitle": "Bengo 2.0",
+        "disableSort": false,
+        "collapse": false,
+        "resources": {
+            "Twitch API": "https://dev.twitch.tv/docs/api/",
+            "Socket.io": "https://socket.io/docs/",
+            "Node.js": "https://nodejs.org/api/"
+        }
+    },
+    "opts": {
+        "destination": "./docs/",
+        "encoding": "utf8",
+        "private": true,
+        "recurse": true,
+        "template": "./node_modules/jsdoc-template"
+    }
+}
