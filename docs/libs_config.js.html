@@ -1,0 +1,245 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>libs/config.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+			<style>
+				.page-header,
+				pre.code-toolbar > .toolbar:hover {
+					background-color: #2AA226;
+				}
+				.callout-primary,
+				.toc .nav > li > a:hover,
+				.toc .nav > li > a:focus,
+				.toc .nav > li.active > a,
+				.toc .nav > li.active > a:hover,
+				.toc .nav > li.active > a:focus,
+				pre.code-toolbar > .toolbar:hover {
+					border-left-color: #2AA226;
+				}
+				pre.code-toolbar > .toolbar:hover {
+					border-bottom-color: #2AA226;
+				}
+				.callout-primary h5,
+				.symbol-title.collapsible-symbol .toggle-icon,
+				.breadcrumb li a,
+				.toc .nav > li > a:hover,
+				.toc .nav > li > a:focus,
+				.toc .nav > li.active > a,
+				.toc .nav > li.active > a:hover,
+				.toc .nav > li.active > a:focus {
+					color: #2AA226;
+				}
+			</style>
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Bengo","systemSummary":"The server backend for the E3 2019 Twitch extension.","systemLogo":"img/logo.png","systemColor":"#2AA226","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"SnatchyBuckles © 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand branding-logo" href="index.html" style="background-image: url(img/logo.png);">
+					Bengo
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#Config">Config</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-Config.html">Config</a></li>
+											<li><a href="module-Database.html">Database</a></li>
+											<li><a href="module-MainServer.html">MainServer</a></li>
+											<li><a href="module-Socket.html">Socket</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">libs/config.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * The configuration manager module, used to create, save and load the configuration values in the global {@link Config} object.
+ * @summary The config manager module.
+ * @module Config
+ * @requires fs
+ */
+const fs = require('fs'); // Load File System
+
+/**
+ * The location of the configuration file.
+ * @readonly
+ * @const {String}
+ */
+const configFile = __dirname + "/../config.json";
+/**
+ * A global object to hold all configuration data for easy access from any module.
+ * @global
+ * @summary The configuration object.
+ * @property {String} SSLKey      The SSL Key file destination
+ * @property {String} SSLCert     The SSL Certificate file destination
+ * @property {String} Conference  The current Conference name
+ * @property {Number} Port        The server port
+ * @property {String} Database    The SQLite3 database file destination
+ */
+global.Config = {};
+
+/**
+ * Load the configFile and store it in the global Config object. Or if no file found at configFile, create a new Config object and save it to the configFile.
+ * @summary Load the configuration.
+ * @async
+ * @function
+ * @return {Promise&lt;Boolean>} The result of the Config object being populated from configFile.
+ * @example LoadConfig().then(function(res) {
+ *  if(res) console.log("Config Loaded!");
+ *  else console.log("Console Failed To Load!");
+ * });
+ */
+function LoadConfig() {
+  console.log("Loading Config...");
+  return new Promise(function(res, err) {
+    fs.exists(configFile, function(exists) {
+      if (exists) {
+        fs.readFile(configFile, function(error, data) {
+          if (error) {
+            err(error);
+            res(false);
+          } else {
+            Config = JSON.parse(data);
+            console.log("Config Loaded!");
+            res(true);
+          }
+        });
+      } else {
+        console.log("No Config Found, Creating One...");
+        Config = {
+          SSLKey: '/../key/privkey.pem',
+          SSLCert: '/../key/fullchain.pem',
+          Conference: "Microsoft",
+          Port: 3000,
+          Database: '../data.db'
+        };
+        fs.writeFile(configFile, JSON.stringify(Config, null, 2), function(error) {
+          if (error) {
+            err(error);
+            res(false);
+          }
+          console.log("Config Created!");
+          res(true);
+        });
+      }
+    });
+  });
+}
+
+/**
+ * Write the current Config object to the configFile.
+ * @summary Save the configuration to file.
+ * @function
+ * @example SaveConfig();
+ */
+function SaveConfig() {
+  fs.writeFile(configFile, JSON.stringify(Config, null, 2), function(err) {
+    if (err) throw err;
+    console.log("Config Updated And Saved!");
+  });
+}
+
+/**
+ * Update the current Conference value of the global Config object, then call the {@link SaveConfig} function.
+ * @summary Update the current conference value.
+ * @function
+ * @param  {String} newConference A string containing the desired conference name.
+ * @example UpdateConference("Ubisoft");
+ */
+function UpdateConference(newConference) {
+  Config.Conference = newConference;
+  SaveConfig();
+}
+
+module.exports = {
+  Load: LoadConfig,
+  Save: SaveConfig,
+  UpdateConference: UpdateConference
+}
+</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">SnatchyBuckles © 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 13th May 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->

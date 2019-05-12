@@ -1,6 +1,10 @@
-# Bengo 2.0
+# Bengo
 
 The backend framework built for the SnatchyBuckles E3 2019 Bingo game. Developed as a companion to the E3 Bingo twitch extension.
+
+## Documentation
+
+Current JSDocs can be found hosted [here](https://cocanuta.github.io/BENGO/).
 
 ## Testing Environment
 

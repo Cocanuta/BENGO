@@ -1,6 +1,7 @@
 /**
- * Bengo 2.0 server
- * @file The main Bengo 2.0 server file.
+ * The main server wrapper used to run the entire backend server.
+ * @summary The main server script.
+ * @module MainServer
  * @requires Config
  * @requires Socket
  * @requires Database

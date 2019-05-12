@@ -1,5 +1,6 @@
 /**
- * Socket Controller
+ * The socket controller used to manage all socket.io and web connections and events.
+ * @summary The socket and web server controller module.
  * @module Socket
  * @requires socket.io
  * @requires express
@@ -14,7 +15,8 @@ const fs = require('fs');
 const io = require('socket.io')();
 
 /**
- * StartSockets - Start the web server and socket.io interface.
+ * Start the web server and socket.io interface.
+ * @summary Start listening for connections.
  * @function
  */
 function StartSockets() {
@@ -47,53 +49,70 @@ io.on("connection", function(socket) {
   });
   socket.on('updateTiles', function(data) {
     Database.UpdatePlayer(data.TwitchID, data.Tiles);
+    SendToTwitchID(data.TwitchID, 'sendTiles', Database.GetPlayer(data.TwitchID));
+    SendToModerators('sendModQueue', Database.GetModerationQueue());
     let checkedCount = 0;
     for (let i = 0; i < data.Tiles.length; i++) {
       if (data.Tiles[i].Checked)
         checkedCount++;
     }
-    for (let soc in IO.sockets.sockets) {
-      if (IO.sockets.sockets[soc].hasOwnProperty("moderator") &&
-        IO.sockets.sockets[soc].moderator === true) {
-        IO.sockets.sockets[soc].emit('sendModQueue', Database.GetModerationQueue());
-      }
-      if (IO.sockets.sockets[soc].hasOwnProperty("TwitchID") &&
-        IO.sockets.sockets[soc].TwitchID == data.TwitchID) {
-        IO.sockets.sockets[soc].emit('sendTiles', Database.GetPlayer(data.TwitchID));
-        if (checkedCount == 15 && !data.Moderate)
-          IO.sockets.sockets[soc].emit('enableBingo');
-      }
+    if(checkedCount == data.Tiles.length) {
+      SendToTwitchID(data.TwitchID, 'enableBingo');
     }
   });
   socket.on('callBingo', function(data) {
     if (data.TwitchID) {
       Database.UpdateModState(data.TwitchID, true);
       socket.emit('sendTiles', Database.GetPlayer(data.TwitchID));
-      for (let soc in IO.sockets.sockets) {
-        if (IO.sockets.sockets[soc].hasOwnProperty("moderator") &&
-          IO.sockets.sockets[soc].moderator === true) {
-          IO.sockets.sockets[soc].emit('sendModQueue', Database.GetModerationQueue());
-        }
-      }
+      SendToModerators('sendModQueue', Database.GetModerationQueue());
     }
   });
   socket.on('modDeny', function(data) {
     if (data.TwitchID) {
       Database.UpdateModState(data.TwitchID, false);
-      for (let soc in IO.sockets.sockets) {
-        if (IO.sockets.sockets[soc].hasOwnProperty("moderator") &&
-          IO.sockets.sockets[soc].moderator === true) {
-          IO.sockets.sockets[soc].emit('sendModQueue', Database.GetModerationQueue());
-        }
-        if (IO.sockets.sockets[soc].hasOwnProperty("TwitchID") &&
-          IO.sockets.sockets[soc].TwitchID == data.TwitchID) {
-          IO.sockets.sockets[soc].emit('sendTiles', Database.GetPlayer(data.TwitchID));
-        }
-      }
+      SendToTwitchID(data.TwitchID, 'sendTiles', Database.GetPlayer(data.TwitchID));
+      SendToModerators('sendModQueue', Database.GetModerationQueue());
     }
   });
 });
 
+/**
+ * Send a Socket.io event to a specificed TwitchID
+ * @summary Send an event to a Player.
+ * @function
+ * @param  {String} twitchID    The TwitchID of the target player.
+ * @param  {String} event       The socket.io event to be sent.
+ * @param  {Object} data        The data to be sent with the event.
+ * @example SendToTwitchID('112334323', 'sendTiles', { 'foo': bar });
+ */
+function SendToTwitchID(twitchID, event, data = null) {
+  const sockets = io.sockets.sockets;
+  for (let soc in sockets) {
+    if (sockets[soc].hasOwnProperty("TwitchID") && sockets[soc].TwitchID == data.TwitchID) {
+      sockets[soc].emit(event, data);
+    }
+  }
+}
+
+/**
+ * Send a Socket.io event to all connected moderators
+ * @summary Send an event to all mods.
+ * @function
+ * @param  {String} event   The socket.io event to be sent.
+ * @param  {Object} data    The data to be sent with the event.
+ * @example SendToModerators('sendModQueue', { 'foo': bar });
+ */
+function SendToModerators(event, data = null) {
+  const sockets = io.sockets.sockets;
+  for (let soc in sockets) {
+    if (sockets[soc].hasOwnProperty("moderator") && sockets[soc].moderator === true) {
+      sockets[soc].emit(event, data);
+    }
+  }
+}
+
 module.exports = {
-  Start: StartSockets
+  Start: StartSockets,
+  SendToTwitchID: SendToTwitchID,
+  SendToModerators: SendToModerators
 }

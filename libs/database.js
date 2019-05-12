@@ -1,5 +1,6 @@
 /**
- * Database Controller
+ * The database controller module used to create, insert and update {@Link Player} data in the connected SQLite database.
+ * @summary The database controller module.
  * @module Database
  * @requires better-sqlite3-helper
  * @requires shuffle
@@ -7,10 +8,11 @@
 const DB = require('better-sqlite3-helper');
 const shuffle = require('shuffle-array');
 
-
 /**
- * Connect - Open a connection to the sqlite3 database.
+ * Open a connection to the sqlite3 database.
+ * @summary Connect to the database.
  * @function
+ * @example Connect();
  */
 function Connect() {
   DB({
@@ -26,6 +28,7 @@ function Connect() {
 
 /**
  * @typedef {Object} Tile
+ * @summary An object to hold Bingo Tile information.
  * @property {Number} TileID The ID of the Bingo tile.
  * @property {String} Title The Title of the Bingo tile.
  * @property {Boolean} Chcked Wether or not the Player has checked the Bingo tile.
@@ -33,6 +36,7 @@ function Connect() {
 
 /**
  * @typedef {Object} Player
+ * @summary An object to hold {@link Player} information.
  * @property {Number} TwitchID The Players Twitch ID.
  * @property {Tile[]} Tiles The Players Bingo tile array.
  * @property {Boolean} Moderate If the player is under moderation.
@@ -40,10 +44,11 @@ function Connect() {
  */
 
 /**
- * GetModerationQueue - Search the database for players where 'Moderate' = true.
- *
+ * Search the database for players where 'Moderate' = true.
+ * @summary Retrive the current moderation queue.
  * @function
  * @return {Player[]} An array of {@link Player}'s who are currently being moderated.
+ * @example GetModerationQueue();
  */
 function GetModerationQueue() {
   let modQueue = DB().query('SELECT * FROM Players WHERE Moderate = ?', 1);
@@ -54,11 +59,12 @@ function GetModerationQueue() {
 }
 
 /**
- * UpdatePlayer - Update a player's tiles in the database.
- *
+ * Update a player's tiles in the database.
+ * @summary Update a {@link Player} in the database.
  * @param  {Number} twitchID The Twitch ID of the {@link Player}.
  * @param  {Tile[]} tiles The updated {@link Tile}'s to be entered int othe database.
  * @function
+ * @example UpdatePlayer('112334323', [ { 'TileID': 1, 'Title': "Foo", 'Checked': false }, { 'TileID': 2, 'Title': "Bar", 'Checked': true } ]);
  */
 function UpdatePlayer(twitchID, tiles) {
   for (let i = 0; i < tiles.length; i++) {
@@ -72,11 +78,12 @@ function UpdatePlayer(twitchID, tiles) {
 }
 
 /**
- * UpdateModState - Update a {@link Player}'s Moderation state
- *
+ * Update a {@link Player}'s Moderation state
+ * @summary Update a {@link Player} mod state.
  * @param  {Number} twitchID The Twitch ID of the {@link Player}.
  * @param  {Boolean} state The new moderation state of the {@link Player}.
  * @function
+ * @example UpdateModState('112334323', false);
  */
 function UpdateModState(twitchID, state) {
   DB().update('Players', {
@@ -113,11 +120,11 @@ function Test() {
 
 
 /**
- * GetPlayer - Retrieve a {@link Player} from the database or create a
- * new {@link Player} and add them to the database.
- *
+ * Retrieve a {@link Player} from the database or create a new {@link Player} and add them to the database.
+ * @summary Get a {@link Player} from the database or Create a new one.
  * @param  {Number} twitchID The Twitch ID of the {@link Player}.
  * @return {Player} The {@link Player} retreived from the Database.
+ * @example GetPlayer('112334323');
  */
 function GetPlayer(twitchID) {
   let playerData = DB().queryFirstRow('SELECT * FROM Players WHERE TwitchID = ?', twitchID);
@@ -153,10 +160,11 @@ function GetPlayer(twitchID) {
 }
 
 /**
- * GetCard - Add the relevant Title's to a {@link Tile[]} array.
- *
+ * Add the relevant Title's to a {@link Tile[]} array.
+ * @summary Get the {@link Tile} Title from the database.
  * @param  {Tile[]} tileArray An array of {@link Tile}'s without Title values.
  * @return {Tile[]} A new array of {@link Tile}'s with Title values.
+ * @example GetCard([ { 'TileID': 1, Checked: false }, { 'TileID': 2, Checked: true } ]);
  */
 function GetCard(tileArray) {
   const allTiles = DB().query('SELECT * FROM Tiles');
@@ -165,7 +173,6 @@ function GetCard(tileArray) {
   }
   return tileArray;
 }
-
 
 module.exports = {
   Connect: Connect,

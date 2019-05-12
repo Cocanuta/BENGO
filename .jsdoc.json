@@ -1,31 +1,35 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc"]
-    },
-    "source": {
-        "include": ["main.js", "libs", "package.json", "README.md"],
-        "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "templates": {
-        "referenceTitle": "Bengo 2.0",
-        "disableSort": false,
-        "collapse": false,
-        "resources": {
-            "Twitch API": "https://dev.twitch.tv/docs/api/",
-            "Socket.io": "https://socket.io/docs/",
-            "Node.js": "https://nodejs.org/api/"
-        }
-    },
-    "opts": {
-        "destination": "./docs/",
-        "encoding": "utf8",
-        "private": true,
-        "recurse": true,
-        "template": "./node_modules/jsdoc-template"
-    }
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc"]
+  },
+  "source": {
+    "include": ["main.js", "./libs", "package.json", "README.md"],
+    "includePattern": ".+\\.(js|jsx)?$",
+    "excludePattern": "(node_modules/|docs)"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "markdown": {
+    "parser": "gfm",
+    "hardwrap": true,
+    "excludeTags": []
+  },
+  "templates": {
+    "systemName": "Bengo",
+    "systemSummary": "The server backend for the E3 2019 Twitch extension.",
+    "systemLogo": "./docs/logo.png",
+    "systemColor": "#2AA226",
+    "copyright": "SnatchyBuckles © 2019",
+    "linenums": true
+  },
+  "opts": {
+    "encoding": "utf8",
+    "recurse": true,
+    "private": false,
+    "lenient": true,
+    "destination": "./docs",
+    "template": "./node_modules/foodoc/template"
+  }
 }

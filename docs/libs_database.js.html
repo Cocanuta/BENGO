@@ -1,0 +1,325 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>libs/database.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+			<style>
+				.page-header,
+				pre.code-toolbar > .toolbar:hover {
+					background-color: #2AA226;
+				}
+				.callout-primary,
+				.toc .nav > li > a:hover,
+				.toc .nav > li > a:focus,
+				.toc .nav > li.active > a,
+				.toc .nav > li.active > a:hover,
+				.toc .nav > li.active > a:focus,
+				pre.code-toolbar > .toolbar:hover {
+					border-left-color: #2AA226;
+				}
+				pre.code-toolbar > .toolbar:hover {
+					border-bottom-color: #2AA226;
+				}
+				.callout-primary h5,
+				.symbol-title.collapsible-symbol .toggle-icon,
+				.breadcrumb li a,
+				.toc .nav > li > a:hover,
+				.toc .nav > li > a:focus,
+				.toc .nav > li.active > a,
+				.toc .nav > li.active > a:hover,
+				.toc .nav > li.active > a:focus {
+					color: #2AA226;
+				}
+			</style>
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Bengo","systemSummary":"The server backend for the E3 2019 Twitch extension.","systemLogo":"img/logo.png","systemColor":"#2AA226","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"SnatchyBuckles © 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand branding-logo" href="index.html" style="background-image: url(img/logo.png);">
+					Bengo
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#Config">Config</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-Config.html">Config</a></li>
+											<li><a href="module-Database.html">Database</a></li>
+											<li><a href="module-MainServer.html">MainServer</a></li>
+											<li><a href="module-Socket.html">Socket</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">libs/database.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * The database controller module used to create, insert and update {@Link Player} data in the connected SQLite database.
+ * @summary The database controller module.
+ * @module Database
+ * @requires better-sqlite3-helper
+ * @requires shuffle
+ */
+const DB = require('better-sqlite3-helper');
+const shuffle = require('shuffle-array');
+
+/**
+ * Open a connection to the sqlite3 database.
+ * @summary Connect to the database.
+ * @function
+ * @example Connect();
+ */
+function Connect() {
+  DB({
+    path: __dirname + Config.Database,
+    memory: false,
+    readonly: false,
+    fileMustExist: true,
+    WAL: false,
+    migrate: false
+  });
+  console.log("Connected To Database!");
+}
+
+/**
+ * @typedef {Object} Tile
+ * @summary An object to hold Bingo Tile information.
+ * @property {Number} TileID The ID of the Bingo tile.
+ * @property {String} Title The Title of the Bingo tile.
+ * @property {Boolean} Chcked Wether or not the Player has checked the Bingo tile.
+ */
+
+/**
+ * @typedef {Object} Player
+ * @summary An object to hold {@link Player} information.
+ * @property {Number} TwitchID The Players Twitch ID.
+ * @property {Tile[]} Tiles The Players Bingo tile array.
+ * @property {Boolean} Moderate If the player is under moderation.
+ * @property {Boolean} Banned If the player has been banned.
+ */
+
+/**
+ * Search the database for players where 'Moderate' = true.
+ * @summary Retrive the current moderation queue.
+ * @function
+ * @return {Player[]} An array of {@link Player}'s who are currently being moderated.
+ * @example GetModerationQueue();
+ */
+function GetModerationQueue() {
+  let modQueue = DB().query('SELECT * FROM Players WHERE Moderate = ?', 1);
+  for (let i = 0; i &lt; modQueue.length; i++) {
+    modQueue[i].Tiles = GetCard(JSON.parse(modQueue[i].Tiles));
+  }
+  return modQueue;
+}
+
+/**
+ * Update a player's tiles in the database.
+ * @summary Update a {@link Player} in the database.
+ * @param  {Number} twitchID The Twitch ID of the {@link Player}.
+ * @param  {Tile[]} tiles The updated {@link Tile}'s to be entered int othe database.
+ * @function
+ * @example UpdatePlayer('112334323', [ { 'TileID': 1, 'Title': "Foo", 'Checked': false }, { 'TileID': 2, 'Title': "Bar", 'Checked': true } ]);
+ */
+function UpdatePlayer(twitchID, tiles) {
+  for (let i = 0; i &lt; tiles.length; i++) {
+    delete tiles[i].Title;
+  }
+  DB().update('Players', {
+    Tiles: JSON.stringify(tiles)
+  }, {
+    TwitchID: twitchID
+  });
+}
+
+/**
+ * Update a {@link Player}'s Moderation state
+ * @summary Update a {@link Player} mod state.
+ * @param  {Number} twitchID The Twitch ID of the {@link Player}.
+ * @param  {Boolean} state The new moderation state of the {@link Player}.
+ * @function
+ * @example UpdateModState('112334323', false);
+ */
+function UpdateModState(twitchID, state) {
+  DB().update('Players', {
+    Moderate: Number(state)
+  }, {
+    TwitchID: twitchID
+  });
+}
+
+function Test() {
+  let tiles = {
+    "Microsoft": [],
+    "Bethesda": [],
+    "PC": [],
+    "Ubisoft": [],
+    "KindaFunny": [],
+    "SquareEnix": [],
+    "Nintendo": [],
+    "Devolver": []
+  };
+  let availableTiles = DB().query('SELECT * FROM Tiles');
+  availableTiles = shuffle(availableTiles);
+
+  for (let conference in tiles) {
+    for (let tile in availableTiles) {
+      if (availableTiles[tile].Conference == conference || availableTiles[tile].Conference == "All") {
+        tiles[conference].push(tile);
+      }
+    }
+    tiles[conference] = shuffle(tiles[conference]);
+  }
+  console.log(tiles);
+}
+
+
+/**
+ * Retrieve a {@link Player} from the database or create a new {@link Player} and add them to the database.
+ * @summary Get a {@link Player} from the database or Create a new one.
+ * @param  {Number} twitchID The Twitch ID of the {@link Player}.
+ * @return {Player} The {@link Player} retreived from the Database.
+ * @example GetPlayer('112334323');
+ */
+function GetPlayer(twitchID) {
+  let playerData = DB().queryFirstRow('SELECT * FROM Players WHERE TwitchID = ?', twitchID);
+  if (playerData) {
+    playerData.Tiles = GetCard(JSON.parse(playerData.Tiles));
+    return playerData;
+  } else {
+    let tiles = [];
+    let availableTiles = DB().query('SELECT * FROM Tiles');
+    availableTiles = shuffle(availableTiles).slice(0, 15);
+    for (let i = 0; i &lt; availableTiles.length; i++) {
+      tiles.push({
+        TileID: availableTiles[i].ID,
+        Checked: false
+      });
+    }
+    try {
+      DB().insert('Players', {
+        TwitchID: twitchID,
+        Tiles: JSON.stringify(tiles)
+      });
+      console.log("New Player '%d' added to the database.", twitchID);
+      return {
+        TwitchID: twitchID,
+        Tiles: GetCard(tiles)
+      };
+    } catch (e) {
+      console.error(e);
+      console.error("Error making new player with ID: ", twitchID);
+      return null;
+    }
+  }
+}
+
+/**
+ * Add the relevant Title's to a {@link Tile[]} array.
+ * @summary Get the {@link Tile} Title from the database.
+ * @param  {Tile[]} tileArray An array of {@link Tile}'s without Title values.
+ * @return {Tile[]} A new array of {@link Tile}'s with Title values.
+ * @example GetCard([ { 'TileID': 1, Checked: false }, { 'TileID': 2, Checked: true } ]);
+ */
+function GetCard(tileArray) {
+  const allTiles = DB().query('SELECT * FROM Tiles');
+  for (let i = 0; i &lt; tileArray.length; i++) {
+    tileArray[i].Title = allTiles.find(t => t.ID === tileArray[i].TileID).Title;
+  }
+  return tileArray;
+}
+
+module.exports = {
+  Connect: Connect,
+  GetPlayer: GetPlayer,
+  GetCard: GetCard,
+  UpdatePlayer: UpdatePlayer,
+  UpdateModState: UpdateModState,
+  GetModerationQueue: GetModerationQueue
+}
+</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">SnatchyBuckles © 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 13th May 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->
